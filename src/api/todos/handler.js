@@ -24,25 +24,18 @@ class TodosHandler {
     
         res.status(200).json({
             status: 'success',
-            data: todos,
+            data: todos || [],
         });
     }
 
     async getTodoByIdHandler(req, res) {
         const id  = req.params.id;
         
-        const index = todos.findIndex((todo) => todo.id === id );
-    
-        if(index === -1) {
-            res.status(404).json({
-                status: 'fail',
-                message: 'id todo tidak ditemukan',
-            });
-        }
+        const result = await this._todosModel.getTodoById(id);
     
         res.status(200).json({
             status: 'success',
-            data: todos[index],
+            data: result,
         });
     }
 
@@ -58,42 +51,25 @@ class TodosHandler {
         });
     }
 
-    async putTodoHandler(req, res) {
+    async putTodoByIdHandler(req, res) {
         const id = req.params.id;
         const { task, completed } = req.body;
     
-        const index = todos.findIndex((todo) => todo.id === id );
-    
-        if (index > -1) {
-            todos[index] = {
-                ...todos[index],
-                task,
-                completed
-            }
-        }
+        const resultId = await this._todosModel.editTodo({ id, task, completed});
        
         res.status(201).json({
             status: 'success',
             message: 'todo berhasil diedit',
             data: {
-                id : todos[index].id,
+                id : resultId,
             }
         });
     }
 
-    async deleteTodoHandler(req, res) {
+    async deleteTodoByIdHandler(req, res) {
         const { id } = req.params;
-    
-        const index = todos.findIndex((todo) => todo.id === id);
-    
-        if (index === -1 ) {
-            res.status(404).json({
-                status: 'fail',
-                message: 'id tidak ditemukan',
-            });
-        }
-    
-        todos.splice(index, 1);
+
+        await this._todosModel.deleteTodo(id);
     
         res.status(200).json({
             status: 'success',
