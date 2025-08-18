@@ -1,0 +1,23 @@
+{
+  "name": "expressjs",
+  "version": "1.0.0",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "service": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "migrate": "node-pg-migrate"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "auto-bind": "^5.0.1",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "morgan": "^1.10.1",
+    "nanoid": "^5.1.5",
+    "nodemon": "^3.1.9"
+  }
+}
