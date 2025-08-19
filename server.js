@@ -2,7 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import todosRouter from './src/api/todos/routes.js';
 import morgan from 'morgan';
-// import loggingMiddleware from './src/middleware/loggingMiddleware.js';
+// import loggingMiddleware from './src/middleware/logger/loggingMiddleware.js';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';

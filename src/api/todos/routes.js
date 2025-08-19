@@ -3,8 +3,8 @@ const router = express.Router();
 import TodosHandler from './handler.js';
 import TodosModel from '../../models/TodosModel.js';
 // import { validateTodo } from '../../middleware/postsValidator.js';
-import { validateTodoPost } from '../../middleware/postsValidator.js';
-import { sanitizeXSS } from '../../middleware/postsSanitation.js';
+import { validateTodoPost } from '../../middleware/validator/postsValidator.js';
+import { sanitizeXSS } from '../../middleware/sanitation/postsSanitation.js';
 
 const todosModel = new TodosModel();
 const todosHandler = new TodosHandler(todosModel);
