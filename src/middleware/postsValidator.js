@@ -30,7 +30,9 @@ export const validateTodoPost = [
             min: 10,
             max: 50
         }).
-        withMessage('Task Minimal 10 karakter dan maksimal 50 karakter'),
+        withMessage('Task Minimal 10 karakter dan maksimal 50 karakter').
+        trim().
+        escape(),
     
     (req, res, next) => {
         const errors = validationResult(req);
