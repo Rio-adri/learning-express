@@ -14,9 +14,11 @@
   "description": "",
   "dependencies": {
     "auto-bind": "^5.0.1",
+    "dompurify": "^3.2.6",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "express-validator": "^7.2.1",
+    "jsdom": "^26.1.0",
     "morgan": "^1.10.1",
     "nanoid": "^5.1.5",
     "nodemon": "^3.1.9"

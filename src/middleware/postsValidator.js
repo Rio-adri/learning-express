@@ -1,5 +1,4 @@
 import {body, validationResult } from 'express-validator';
-
 // export const validateTodo = (req, res, next) => {
 //     const { task } = req.body;
 
@@ -44,5 +43,5 @@ export const validateTodoPost = [
         }
     
         next();
-    }
+    },
 ];
