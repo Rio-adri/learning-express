@@ -19,7 +19,7 @@ import {body, validationResult } from 'express-validator';
 //     next();
 // }
 
-export const validateTodoPost = [
+export const validateTask = 
     body('task').
         isString().
         withMessage('Task harus bertipe string').
@@ -31,17 +31,21 @@ export const validateTodoPost = [
         }).
         withMessage('Task Minimal 10 karakter dan maksimal 50 karakter').
         trim().
-        escape(),
-    
-    (req, res, next) => {
-        const errors = validationResult(req);
-            
-        if(!errors.isEmpty()) {
-            return res.status(400).json({
-                errors: errors.array(),
-            });
-        }
-    
-        next();
-    },
-];
+        escape();
+
+export const validateCompleted = 
+    body('completed').
+        isBoolean().
+        withMessage('completed harus true atau false');
+
+export const validationResultHandler = (req, res, next) => {
+    const errors = validationResult(req);
+        
+    if(!errors.isEmpty()) {
+        return res.status(400).json({
+            errors: errors.array(),
+        });
+    }
+
+    next();
+}

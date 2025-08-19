@@ -3,16 +3,16 @@ const router = express.Router();
 import TodosHandler from './handler.js';
 import TodosModel from '../../models/TodosModel.js';
 // import { validateTodo } from '../../middleware/postsValidator.js';
-import { validateTodoPost } from '../../middleware/validator/postsValidator.js';
-import { sanitizeXSS } from '../../middleware/sanitation/postsSanitation.js';
+import { validateTask, validateCompleted, validationResultHandler } from '../../middleware/validation/bodyValidation.js';
+import { sanitizeXSS } from '../../middleware/sanitation/sanitizeXSS.js';
 
 const todosModel = new TodosModel();
 const todosHandler = new TodosHandler(todosModel);
 
 router.get('', todosHandler.getTodosHandler);
 router.get('/:id', todosHandler.getTodoByIdHandler);
-router.post('', validateTodoPost, sanitizeXSS, todosHandler.postTodoHandler);
-router.put('/:id', todosHandler.putTodoByIdHandler);
+router.post('', validateTask, validationResultHandler, sanitizeXSS, todosHandler.postTodoHandler);
+router.put('/:id', validateTask, validateCompleted, validationResultHandler, sanitizeXSS, todosHandler.putTodoByIdHandler);
 router.delete('/:id', todosHandler.deleteTodoByIdHandler)
 
 export default router;
