@@ -16,13 +16,13 @@ class TodosHandler {
             const completedBool = completed === "true";
             const todosFilter = todos.filter((todo) => todo.task === task && todo.completed === completedBool);
     
-            res.status(200).json({
+            return res.status(200).json({
                 status: 'success',
                 data: todosFilter,
             });
         }
     
-        res.status(200).json({
+        return res.status(200).json({
             status: 'success',
             data: todos || [],
         });
@@ -33,7 +33,7 @@ class TodosHandler {
         
         const result = await this._todosModel.getTodoById(id);
     
-        res.status(200).json({
+        return res.status(200).json({
             status: 'success',
             data: result,
         });
@@ -44,7 +44,7 @@ class TodosHandler {
     
         const id = await this._todosModel.addTodo({ task });
         
-        res.status(201).json({
+        return res.status(201).json({
             status: 'success',
             message: 'todo berhasil dibuat',
             data: id
@@ -57,7 +57,7 @@ class TodosHandler {
     
         const resultId = await this._todosModel.editTodo({ id, task, completed});
        
-        res.status(201).json({
+        return res.status(201).json({
             status: 'success',
             message: 'todo berhasil diedit',
             data: {
@@ -71,7 +71,7 @@ class TodosHandler {
 
         await this._todosModel.deleteTodo(id);
     
-        res.status(200).json({
+        return res.status(200).json({
             status: 'success',
             message: 'todo berhasil dihapus'
         });
