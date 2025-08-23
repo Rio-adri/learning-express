@@ -1,4 +1,4 @@
-import {body} from 'express-validator';
+const {body} = require('express-validator');
 // export const validateTodo = (req, res, next) => {
 //     const { task } = req.body;
 
@@ -19,7 +19,7 @@ import {body} from 'express-validator';
 //     next();
 // }
 
-export const validateTask = 
+const validateTask = 
     body('task').
         isString().
         withMessage('Task harus bertipe string').
@@ -33,7 +33,9 @@ export const validateTask =
         trim().
         escape();
 
-export const validateCompleted = 
+const validateCompleted = 
     body('completed').
         isBoolean().
         withMessage('completed harus true atau false');
+
+module.exports = { validateTask, validateCompleted };

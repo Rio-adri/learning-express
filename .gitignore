@@ -1,3 +1,4 @@
 node_modules
 .env
-src/resource/
+uploads
+logs

@@ -1,25 +1,22 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import todosRouter from './src/api/todos/routes.js';
-import morgan from 'morgan';
-// import loggingMiddleware from './src/middleware/logger/loggingMiddleware.js';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
+const express = require('express');
+const dotenv = require('dotenv');
 dotenv.config();
+const todosRouter = require('./src/api/todos/routes.js');
+const morgan = require('morgan');
+// const loggingMiddleware = require('./src/middleware/logger/loggingMiddleware.js');
+const fs = require('fs');
+const path = require('path');
 
 const app = express();
 
-const port = 3000;
-
+const host = process.env.HOST;
+const port = process.env.PORT;
+  
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 const accessLogStream = fs.createWriteStream(
-    path.join(__dirname, './src/resource/log/access.log'),
+    path.join(__dirname, './logs/access.log'),
     { flags: 'a' }
 );
 
@@ -30,6 +27,6 @@ app.use(morgan('combined', { stream: accessLogStream}))
 
 app.use('/todos', todosRouter);
 
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`);
+app.listen(port, host, () => {
+    console.log(`Example app listening on port http://${host}:${port}`);
 });

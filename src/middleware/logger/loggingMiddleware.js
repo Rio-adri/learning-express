@@ -1,12 +1,12 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+const fs = require('fs');
+const path = require('path');
+const { fileURLToPath } = require('url');
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const logFileRequest = path.join(__dirname, '../resource/log/request.log');
-const logFileResponse = path.join(__dirname, '../resource/log/response.log');
+const logFileRequest = path.join(__dirname, '../../../logs/access.log');
+const logFileResponse = path.join(__dirname, '../../../logs/access.log');
 
 
 const loggingMiddleware = (req, res, next) => {
@@ -30,4 +30,4 @@ const loggingMiddleware = (req, res, next) => {
     next();
 }
 
-export default loggingMiddleware;
+module.exports = loggingMiddleware;

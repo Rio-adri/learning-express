@@ -1,20 +1,20 @@
-import express from 'express';
+const express = require('express');
 const router = express.Router();
-import TodosHandler from './handler.js';
-import TodosModel from '../../models/TodosModel.js';
-// import { validateTodo } from '../../middleware/postsValidator.js';
-import { validateTask, validateCompleted } from '../../middleware/validation/bodyValidation.js';
-import { paramValidation } from '../../middleware/validation/paramValidation.js';
-import { validationResultHandler } from '../../middleware/validation/handler.js';
-import { sanitizeXSS } from '../../middleware/sanitation/sanitizeXSS.js';
+const TodosHandler = require('./handler.js');
+const TodosService = require('../../services/TodosService.js');
+// const { validateTodo } = require('../../middleware/postsValidator.js');
+const { validateTask, validateCompleted } = require('../../middleware/validation/bodyValidation.js');
+const { paramValidation } = require('../../middleware/validation/paramValidation.js');
+const { validationResultHandler } = require('../../middleware/validation/handler.js');
+const { sanitizeXSS } = require('../../middleware/sanitation/sanitizeXSS.js');
 
-const todosModel = new TodosModel();
-const todosHandler = new TodosHandler(todosModel);
+const todosService = new TodosService();
+const todosHandler = new TodosHandler(todosService);
 
 router.get('', todosHandler.getTodosHandler);
 router.get('/:id', paramValidation, validationResultHandler, todosHandler.getTodoByIdHandler);
-router.post('', paramValidation, validateTask, validationResultHandler, sanitizeXSS, todosHandler.postTodoHandler);
+router.post('', validateTask, validationResultHandler, sanitizeXSS, todosHandler.postTodoHandler);
 router.put('/:id', paramValidation, validateTask, validateCompleted, validationResultHandler, sanitizeXSS, todosHandler.putTodoByIdHandler);
 router.delete('/:id', paramValidation, validationResultHandler, todosHandler.deleteTodoByIdHandler)
 
-export default router;
+module.exports = router;

@@ -1,16 +1,19 @@
-import autoBind from "auto-bind";
 
 class TodosHandler {
-    constructor(todosModel) {
-        this._todosModel = todosModel;
+    constructor(todosService) {
+        this._todosService = todosService;
 
-        autoBind(this);
+        this.getTodosHandler = this.getTodosHandler.bind(this);
+        this.getTodoByIdHandler = this.getTodoByIdHandler.bind(this);
+        this.postTodoHandler = this.postTodoHandler.bind(this);
+        this.putTodoByIdHandler = this.putTodoByIdHandler.bind(this);
+        this.deleteTodoByIdHandler = this.deleteTodoByIdHandler.bind(this);
     }
 
     async getTodosHandler (req, res) {
         const { task, completed } = req.query; 
 
-        const todos = await this._todosModel.getTodos();
+        const todos = await this._todosService.getTodos();
     
         if(task !== undefined || completed !== undefined) {
             const completedBool = completed === "true";
@@ -31,7 +34,7 @@ class TodosHandler {
     async getTodoByIdHandler(req, res) {
         const id  = req.params.id;
         
-        const result = await this._todosModel.getTodoById(id);
+        const result = await this._todosService.getTodoById(id);
     
         return res.status(200).json({
             status: 'success',
@@ -42,7 +45,7 @@ class TodosHandler {
     async postTodoHandler(req, res) {
         const task = req.body.task;
     
-        const id = await this._todosModel.addTodo({ task });
+        const id = await this._todosService.addTodo({ task });
         
         return res.status(201).json({
             status: 'success',
@@ -55,7 +58,7 @@ class TodosHandler {
         const id = req.params.id;
         const { task, completed } = req.body;
     
-        const resultId = await this._todosModel.editTodo({ id, task, completed});
+        const resultId = await this._todosService.editTodo({ id, task, completed});
        
         return res.status(201).json({
             status: 'success',
@@ -69,7 +72,7 @@ class TodosHandler {
     async deleteTodoByIdHandler(req, res) {
         const { id } = req.params;
 
-        await this._todosModel.deleteTodo(id);
+        await this._todosService.deleteTodo(id);
     
         return res.status(200).json({
             status: 'success',
@@ -79,4 +82,4 @@ class TodosHandler {
 
 }
 
-export default TodosHandler;
+module.exports = TodosHandler;

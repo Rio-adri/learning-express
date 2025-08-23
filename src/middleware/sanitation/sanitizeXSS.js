@@ -1,10 +1,10 @@
-import createDOMPurify from 'dompurify';
-import { JSDOM } from 'jsdom';
+const createDOMPurify = require('dompurify');
+const { JSDOM } = require('jsdom');
 
 const window = new JSDOM('').window;
 const DOMpurify = createDOMPurify(window);
 
-export const sanitizeXSS = (req, res, next) => {
+const sanitizeXSS = (req, res, next) => {
     if(req.body.task) {
         req.body.task = DOMpurify.sanitize(req.body.task);
     }
@@ -16,3 +16,4 @@ export const sanitizeXSS = (req, res, next) => {
     next();
 }
 
+module.exports = { sanitizeXSS }

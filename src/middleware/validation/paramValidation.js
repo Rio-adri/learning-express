@@ -1,9 +1,10 @@
-import { param } from 'express-validator';
+const { param } = require('express-validator');
 
-export const paramValidation = 
+const paramValidation = 
     param('id').
         isString().
         withMessage('Id harus bertipe string').
         trim().
         escape();
 
+module.exports = { paramValidation };
