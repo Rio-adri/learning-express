@@ -1,4 +1,3 @@
-
 class TodosHandler {
     constructor(todosService) {
         this._todosService = todosService;
@@ -11,9 +10,10 @@ class TodosHandler {
     }
 
     async getTodosHandler (req, res) {
+        const userId = req.user.id;
         const { task, completed } = req.query; 
 
-        const todos = await this._todosService.getTodos();
+        const todos = await this._todosService.getTodos(userId);
     
         if(task !== undefined || completed !== undefined) {
             const completedBool = completed === "true";
@@ -33,8 +33,9 @@ class TodosHandler {
 
     async getTodoByIdHandler(req, res) {
         const id  = req.params.id;
+        const userId = req.user.id;
         
-        const result = await this._todosService.getTodoById(id);
+        const result = await this._todosService.getTodoById(userId, id);
     
         return res.status(200).json({
             status: 'success',
@@ -44,8 +45,9 @@ class TodosHandler {
 
     async postTodoHandler(req, res) {
         const task = req.body.task;
+        const userId = req.user.id;
     
-        const id = await this._todosService.addTodo({ task });
+        const id = await this._todosService.addTodo({ task, userId });
         
         return res.status(201).json({
             status: 'success',
@@ -55,10 +57,11 @@ class TodosHandler {
     }
 
     async putTodoByIdHandler(req, res) {
+        const userId = req.user.id;
         const id = req.params.id;
         const { task, completed } = req.body;
     
-        const resultId = await this._todosService.editTodo({ id, task, completed});
+        const resultId = await this._todosService.editTodo({ id, task, completed}, userId);
        
         return res.status(201).json({
             status: 'success',
@@ -71,8 +74,9 @@ class TodosHandler {
 
     async deleteTodoByIdHandler(req, res) {
         const { id } = req.params;
+        const userId = req.user.id;
 
-        await this._todosService.deleteTodo(id);
+        await this._todosService.deleteTodo(id, userId);
     
         return res.status(200).json({
             status: 'success',

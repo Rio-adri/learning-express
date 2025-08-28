@@ -18,29 +18,45 @@ const sequelize = createSequelize(dbConfig);
     }
 })();
 
-// model definition
-const Todo = sequelize.define('Todo', {
-    task: {
+const User = sequelize.define('User', {
+    id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: false,
+    },
+    username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+    },
+    email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+            isEmail: true,
+        }
+    },
+    password: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    completed: {
-        type: DataTypes.BOOLEAN,
-    },
-    owner: {
+    fullname: {
         type: DataTypes.STRING,
         allowNull: false,
     }
 }, {
-    tableName: 'todos',
+    tableName: 'users',
     timestamps: false
 });
 
-Todo.associations = (models) => {
-    Todo.belongsTo(models.User, {
+User.associations = (models) => {
+    User.hasMany(models.Todo, {
         foreignKey: 'owner',
-        as: 'user'
+        as: 'todos',
+        onDelete: 'CASCADE',
     });
-}
+};
 
-module.exports =  Todo 
+module.exports = User;

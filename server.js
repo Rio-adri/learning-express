@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 dotenv.config();
 const todosRouter = require('./src/api/todos/routes.js');
+const usersRouter = require('./src/api/users/routes.js');
 const morgan = require('morgan');
 // const loggingMiddleware = require('./src/middleware/logger/loggingMiddleware.js');
 const fs = require('fs');
@@ -26,6 +27,8 @@ const accessLogStream = fs.createWriteStream(
 app.use(morgan('combined', { stream: accessLogStream}))
 
 app.use('/todos', todosRouter);
+app.use('/user', usersRouter);
+
 
 app.listen(port, host, () => {
     console.log(`Example app listening on port http://${host}:${port}`);
