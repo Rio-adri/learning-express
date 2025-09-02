@@ -5,7 +5,7 @@ const UsersService = require("./../../services/UsersService.js");
 const AuthenticationsService = require("../../services/AuthentictionsService.js");
 const AuthenticationsHandler = require("../authentication/handler.js");
 const TokenManager = require("./../../tokenize/TokenManager.js");
-const { sanitizeXSS } = require("./../../middleware/validation/sanitation/sanitizeXSS.js");
+const { sanitizeXSS } = require("./../../middleware/sanitation/sanitizeXSS.js");
 
 const usersService = new UsersService();
 const authenticationsService = new AuthenticationsService();

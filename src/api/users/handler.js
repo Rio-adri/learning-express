@@ -6,23 +6,27 @@ class UsersHandler {
     }
 
     async postUserHandler(req, res) {
-        const user = req.body;
+        try {
+            const user = req.body;
 
-        const userId = await this._userService.createUser(user);
+            const userId = await this._userService.createUser(user);
 
-        if(userId === 'username atau email sudah digunakan') {
-            return res.status(409).json({
-                status: 'fail',
-                message: userId,
-            });
-        }
-
-        return res.status(201).json({
-            status: 'success',
-            data: {
-                userId,
+            if(userId === 'username atau email sudah digunakan') {
+                return res.status(409).json({
+                    status: 'fail',
+                    message: userId,
+                });
             }
-        });
+
+            return res.status(201).json({
+                status: 'success',
+                data: {
+                    userId,
+                }
+            });
+        } catch(error) {
+            next(error);
+        }
     }
 }
 

@@ -1,46 +1,43 @@
 const Authentication = require("../models/Authentication.js");
+const InvariantError = require("../exceptions/InvariantError.js");
+const NotFoundError = require("../exceptions/NotFoundError.js");
 
 class AuthenticationsService {
     async addRefreshToken(token) {
-        try {
-            const newToken = await Authentication.create({
-                token,
-            });
-        } catch(error) {
-            return error;
+        const newToken = await Authentication.create({
+            token,
+        });
+
+        if(!newToken) {
+            throw new InvariantError("Refresh Token gagal disimpan");
         }
     }
 
     async verifyRefreshToken(token) {
-        try {
-            const result = await Authentication.findOne({
-                where: {
-                    token,
-                }
-            });
+        const result = await Authentication.findOne({
+            where: {
+                token,
+            }
+        });
 
-            return result;
-        } catch(error) {
-            return error;
+        if(!result) {
+            throw new NotFoundError("Refresh Token tidak ditemukan")
         }
+        return result;
     }
 
     async deleteRefreshToken(token) {
-        try {
-            const deletedToken = await Authentication.destroy({
-                where: {
-                    token,
-                }
-            });
-
-            if(deletedToken === 0) {
-                return "gagal dihapus";
+        const deletedToken = await Authentication.destroy({
+            where: {
+                token,
             }
-
-            return "Berhasil dihapus";
-        } catch(error) {
-            return error;
+        });
+        
+        if(deletedToken === 0) {
+            throw new InvariantError("Token Gagal dihapus");
         }
+
+        return "Berhasil dihapus";
     }
 }
 

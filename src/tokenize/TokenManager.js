@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 const TokenManager = {
-    generateToken: (payload) => {
+    generateAccessToken: (payload) => {
         try {
             const token = jwt.sign(payload, process.env.AUTH_KEY, { expiresIn: process.env.AUTH_AGE });
 
@@ -19,9 +19,16 @@ const TokenManager = {
             console.log(error);
         }
     },
-    verifyToken: (token) => {
+    verifyAccessToken: (token) => {
         try {
             return jwt.verify(token, process.env.AUTH_KEY);
+        } catch(error) {
+            console.log(error);
+        }
+    },
+    verifyRefreshToken(token) {
+        try {
+            return jwt.verify(token, process.env.REFRESH_KEY);
         } catch(error) {
             console.log(error);
         }

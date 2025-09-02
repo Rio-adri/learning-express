@@ -2,12 +2,14 @@ const { nanoid } = require('nanoid');
 const bcrypt = require("bcrypt");
 const User = require("./../models/User.js");
 const { Op } = require('sequelize');
+const NotFoundError = require('../exceptions/NotFoundError.js');
+const InvariantError = require('../exceptions/InvariantError.js');
 
 class UsersService {
     async createUser({ username, email, password, fullname }) {
         try {
             if(await this.verifyUser(username, email)) {
-                return 'username atau email sudah digunakan';
+                throw new InvariantError("Username atau Email sudah digunakan");
             }
     
             const id = `user-${nanoid(16)}`;
@@ -23,7 +25,7 @@ class UsersService {
     
             return user.id;
         } catch(error) {
-            return error;
+            throw error;
         }
     }
 
@@ -37,12 +39,10 @@ class UsersService {
                     ],
                 }
             });
-            if(!user) {
-                return;
-            }
+            
             return user.id;
         } catch(error) {
-            return error;
+            throw error;
         }
     }
 
@@ -54,16 +54,16 @@ class UsersService {
                 }
             });
 
-            if(!user) return;
+            if(!user) throw new NotFoundError("user tidak ditemukan");
             
 
             const isValid = await bcrypt.compare(password, user.password);
 
-            if(!isValid) return;
+            if(!isValid) throw new InvariantError("password tidak valid");
 
             return user.id;
         } catch(error) {
-            return error;
+            throw error;
         }
     }
 }

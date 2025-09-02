@@ -4,6 +4,7 @@ dotenv.config();
 const todosRouter = require('./src/api/todos/routes.js');
 const usersRouter = require('./src/api/users/routes.js');
 const morgan = require('morgan');
+const exceptionsHandler = require("./src/middleware/exceptionsHandler/exceptionsHandler.js");
 // const loggingMiddleware = require('./src/middleware/logger/loggingMiddleware.js');
 const fs = require('fs');
 const path = require('path');
@@ -26,8 +27,12 @@ const accessLogStream = fs.createWriteStream(
 
 app.use(morgan('combined', { stream: accessLogStream}))
 
+
 app.use('/todos', todosRouter);
 app.use('/user', usersRouter);
+
+app.use(exceptionsHandler);
+
 
 
 app.listen(port, host, () => {

@@ -7,9 +7,11 @@ const { validateTask, validateCompleted } = require('../../middleware/validation
 const { paramValidation } = require('../../middleware/validation/todo/paramValidation.js');
 const jwtValidation = require("./../../middleware/authentication/jwtValidation.js");
 const { validationResultHandler } = require('../../middleware/validation/todo/handler.js');
-const { sanitizeXSS } = require('../../middleware/validation/sanitation/sanitizeXSS.js');
+const { sanitizeXSS } = require('../../middleware/sanitation/sanitizeXSS.js');
+const CacheService = require('../../services/redis/CacheService.js');
 
-const todosService = new TodosService();
+const cacheService = new CacheService();
+const todosService = new TodosService(cacheService);
 const todosHandler = new TodosHandler(todosService);
 
 router.get('', jwtValidation, todosHandler.getTodosHandler);

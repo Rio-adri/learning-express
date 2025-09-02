@@ -9,79 +9,101 @@ class TodosHandler {
         this.deleteTodoByIdHandler = this.deleteTodoByIdHandler.bind(this);
     }
 
-    async getTodosHandler (req, res) {
-        const userId = req.user.id;
-        const { task, completed } = req.query; 
+    async getTodosHandler (req, res, next) {
+        try {
+            const userId = req.user.id;
+            const { task, completed } = req.query; 
 
-        const todos = await this._todosService.getTodos(userId);
-    
-        if(task !== undefined || completed !== undefined) {
-            const completedBool = completed === "true";
-            const todosFilter = todos.filter((todo) => todo.task === task && todo.completed === completedBool);
-    
+            const todos = await this._todosService.getTodos(userId);
+        
+            if(task !== undefined || completed !== undefined) {
+                const completedBool = completed === "true";
+                const todosFilter = todos.data.filter((todo) => todo.task === task && todo.completed === completedBool);
+        
+                return res.status(200).json({
+                    status: 'success',
+                    data: todosFilter,
+                });
+            }
+            
+            if(todos.source === 'cache') res.set('X-Data-Source', 'cache');
+
             return res.status(200).json({
                 status: 'success',
-                data: todosFilter,
+                data: todos.data || [],
             });
+        } catch(error) {
+            next(error);
         }
-    
-        return res.status(200).json({
-            status: 'success',
-            data: todos || [],
-        });
     }
 
-    async getTodoByIdHandler(req, res) {
-        const id  = req.params.id;
-        const userId = req.user.id;
+    async getTodoByIdHandler(req, res, next) {
+        try {
+            const id  = req.params.id;
+            const userId = req.user.id;
+            
+            const result = await this._todosService.getTodoById(userId, id);
+            if (!result)
+            return res.status(200).json({
+                status: 'success',
+                data: result,
+            });
+        } catch(error) {
+            next(error)
+        }
+    }
+
+    async postTodoHandler(req, res, next) {
+        try {
+            const task = req.body.task;
+            const userId = req.user.id;
         
-        const result = await this._todosService.getTodoById(userId, id);
-    
-        return res.status(200).json({
-            status: 'success',
-            data: result,
-        });
+            const id = await this._todosService.addTodo({ task, userId });
+            
+            return res.status(201).json({
+                status: 'success',
+                message: 'todo berhasil dibuat',
+                data: id
+            });
+        } catch(error) {
+            next(error);
+        }
     }
 
-    async postTodoHandler(req, res) {
-        const task = req.body.task;
-        const userId = req.user.id;
-    
-        const id = await this._todosService.addTodo({ task, userId });
+    async putTodoByIdHandler(req, res, next) {
+        try {
+            const userId = req.user.id;
+            const id = req.params.id;
+            const { task, completed } = req.body;
         
-        return res.status(201).json({
-            status: 'success',
-            message: 'todo berhasil dibuat',
-            data: id
-        });
-    }
-
-    async putTodoByIdHandler(req, res) {
-        const userId = req.user.id;
-        const id = req.params.id;
-        const { task, completed } = req.body;
-    
-        const resultId = await this._todosService.editTodo({ id, task, completed}, userId);
-       
-        return res.status(201).json({
-            status: 'success',
-            message: 'todo berhasil diedit',
-            data: {
-                id : resultId,
-            }
-        });
+            const resultId = await this._todosService.editTodo({ id, task, completed}, userId);
+        
+            return res.status(201).json({
+                status: 'success',
+                message: 'todo berhasil diedit',
+                data: {
+                    id : resultId,
+                }
+            });
+        } catch(error) {
+            next(error)
+        }
     }
 
     async deleteTodoByIdHandler(req, res) {
-        const { id } = req.params;
-        const userId = req.user.id;
+        try {
+            const { id } = req.params;
+            const userId = req.user.id;
 
-        await this._todosService.deleteTodo(id, userId);
-    
-        return res.status(200).json({
-            status: 'success',
-            message: 'todo berhasil dihapus'
-        });
+            await this._todosService.deleteTodo(id, userId);
+        
+            return res.status(200).json({
+                status: 'success',
+                message: 'todo berhasil dihapus'
+            });
+        } catch(error) {
+            next(error);
+        }
     }
 
 }
