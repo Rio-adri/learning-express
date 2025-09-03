@@ -76,7 +76,7 @@ class TodosHandler {
             const id = req.params.id;
             const { task, completed } = req.body;
         
-            const resultId = await this._todosService.editTodo({ id, task, completed}, userId);
+            const resultId = await this._todosService.editTodo({ id, task, completed }, userId);
         
             return res.status(201).json({
                 status: 'success',

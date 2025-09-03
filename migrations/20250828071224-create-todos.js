@@ -29,7 +29,7 @@ module.exports = {
           },
           onUpdate: 'CASCADE',
           onDelete: 'CASCADE',
-        },
+        }
       }, { transaction: t });
     })
   },

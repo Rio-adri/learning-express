@@ -5,6 +5,11 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     return queryInterface.sequelize.transaction(async (t) => {
       await queryInterface.createTable('authentications', {
+        id: {
+          type: Sequelize.STRING,
+          allowNull: false,
+          primaryKey: true,
+        },
         token: {
           type: Sequelize.STRING,
           allowNull: false,

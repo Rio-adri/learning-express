@@ -8,7 +8,7 @@ const InvariantError = require('../exceptions/InvariantError.js');
 class UsersService {
     async createUser({ username, email, password, fullname }) {
         try {
-            if(await this.verifyUser(username, email)) {
+            if(await this.verifyUser(username, email) !== null) {
                 throw new InvariantError("Username atau Email sudah digunakan");
             }
     
@@ -20,7 +20,8 @@ class UsersService {
                 username,
                 email,
                 password: hashedPassword,
-                fullname
+                fullname,
+
             });
     
             return user.id;
@@ -39,6 +40,10 @@ class UsersService {
                     ],
                 }
             });
+
+            if (user === null) {
+                return user;
+            }
             
             return user.id;
         } catch(error) {
@@ -54,7 +59,7 @@ class UsersService {
                 }
             });
 
-            if(!user) throw new NotFoundError("user tidak ditemukan");
+            if(user === null) throw new NotFoundError("user tidak ditemukan");
             
 
             const isValid = await bcrypt.compare(password, user.password);

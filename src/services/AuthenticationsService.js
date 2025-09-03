@@ -1,10 +1,13 @@
 const Authentication = require("../models/Authentication.js");
 const InvariantError = require("../exceptions/InvariantError.js");
 const NotFoundError = require("../exceptions/NotFoundError.js");
+const { nanoid } = require("nanoid");
 
 class AuthenticationsService {
     async addRefreshToken(token) {
+        const id = `refreshToken-${nanoid(16)}`;
         const newToken = await Authentication.create({
+            id,
             token,
         });
 

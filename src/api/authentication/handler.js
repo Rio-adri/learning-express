@@ -14,6 +14,7 @@ class AuthenticationsHandler {
             const { username, password } = req.body;
 
             const id = await this._userService.verifyUserCredentials(username, password);
+            
             const token = await this._tokenManager.generateAccessToken({ id });
             const refreshToken = await this._tokenManager.generateRefreshToken({ id });
             await this._authenticationsService.addRefreshToken(refreshToken);

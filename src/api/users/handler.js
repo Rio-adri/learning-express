@@ -5,7 +5,7 @@ class UsersHandler {
         this.postUserHandler = this.postUserHandler.bind(this);
     }
 
-    async postUserHandler(req, res) {
+    async postUserHandler(req, res, next) {
         try {
             const user = req.body;
 

@@ -54,7 +54,7 @@ class TodosService {
         const newTask = await Todo.create({
             id,
             task,
-            owner: userId
+            owner: userId,
         });
 
         await this._cacheService.delete(`user-todos:${userId}`);
@@ -63,11 +63,13 @@ class TodosService {
     }
 
     async editTodo({ id, task, completed }, userId) {
-       const newData = {
-        id,
-        task,
-        completed
-       }
+    
+        const newData = {
+            id,
+            task,
+            completed,
+        }
+       
 
        const [updateCount, updateTodos] = await Todo.update(newData, {
         where: {

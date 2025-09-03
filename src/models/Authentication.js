@@ -14,13 +14,18 @@ checkSequelize(sequelize, env);
 
 // model definition
 const Authentication = sequelize.define('Authentication', {
-   token: {
-    type: DataTypes.STRING,
-    allowNull: false,
-   }
+    id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        primaryKey: true
+    },
+    token: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    }
 }, {
     tableName: 'authentications',
-    timestamps: false
+    timestamps: false,
 });
 
 module.exports =  Authentication;
