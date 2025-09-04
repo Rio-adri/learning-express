@@ -30,7 +30,7 @@ app.use(morgan('combined', { stream: accessLogStream}))
 
 app.use('/todos', todosRouter);
 app.use('/user', usersRouter);
-
+app.use('/uploads', express.static(path.resolve(__dirname, "./uploads")));
 app.use(exceptionsHandler);
 
 

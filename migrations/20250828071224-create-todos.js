@@ -29,6 +29,10 @@ module.exports = {
           },
           onUpdate: 'CASCADE',
           onDelete: 'CASCADE',
+        },
+        fileUrl: {
+          type: Sequelize.STRING,
+          allowNull: true
         }
       }, { transaction: t });
     })

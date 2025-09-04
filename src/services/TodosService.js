@@ -48,13 +48,14 @@ class TodosService {
     
     }
 
-    async addTodo({ task, userId }) {
+    async addTodo({ task, userId, fileUrl }) {
         const id = `todo-${nanoid(16)}`;
 
         const newTask = await Todo.create({
             id,
             task,
             owner: userId,
+            fileUrl
         });
 
         await this._cacheService.delete(`user-todos:${userId}`);
@@ -62,12 +63,22 @@ class TodosService {
         return newTask.id;
     }
 
-    async editTodo({ id, task, completed }, userId) {
+    async editTodo({ id, task, completed, fileUrl }, userId) {
+        let newData;
+
+        if(fileUrl === null ) {
+            newData = {
+                id,
+                task,
+                completed,
+            }
+        }
     
-        const newData = {
+        newData = {
             id,
             task,
             completed,
+            fileUrl
         }
        
 

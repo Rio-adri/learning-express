@@ -24,6 +24,10 @@ const Todo = sequelize.define('Todo', {
     owner: {
         type: DataTypes.STRING,
         allowNull: false,
+    },
+    fileUrl: {
+        type: DataTypes.STRING,
+        allowNull: true
     }
 }, {
     tableName: 'todos',

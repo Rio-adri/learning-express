@@ -56,9 +56,11 @@ class TodosHandler {
     async postTodoHandler(req, res, next) {
         try {
             const task = req.body.task;
+            const fileUrl = req.file ? `/uploads/images/${req.file.filename}` : null;
+
             const userId = req.user.id;
         
-            const id = await this._todosService.addTodo({ task, userId });
+            const id = await this._todosService.addTodo({ task, userId, fileUrl });
             
             return res.status(201).json({
                 status: 'success',
@@ -74,9 +76,10 @@ class TodosHandler {
         try {
             const userId = req.user.id;
             const id = req.params.id;
+            const fileUrl = req.file ? `uploads/images/${req.file.filename}` : null;
             const { task, completed } = req.body;
         
-            const resultId = await this._todosService.editTodo({ id, task, completed }, userId);
+            const resultId = await this._todosService.editTodo({ id, task, completed, fileUrl }, userId);
         
             return res.status(201).json({
                 status: 'success',
