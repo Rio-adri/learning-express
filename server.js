@@ -1,13 +1,22 @@
+// thirdy package
 const express = require('express');
-const dotenv = require('dotenv');
-dotenv.config();
-const todosRouter = require('./src/api/todos/routes.js');
-const usersRouter = require('./src/api/users/routes.js');
 const morgan = require('morgan');
-const exceptionsHandler = require("./src/middleware/exceptionsHandler/exceptionsHandler.js");
-// const loggingMiddleware = require('./src/middleware/logger/loggingMiddleware.js');
+
+// built in module
 const fs = require('fs');
 const path = require('path');
+
+// env
+const dotenv = require('dotenv');
+dotenv.config();
+
+// route
+const todosRouter = require('./src/api/todos/routes.js');
+const usersRouter = require('./src/api/users/routes.js');
+
+// middleware
+const exceptionsHandler = require("./src/middleware/exceptionsHandler/exceptionsHandler.js");
+// const loggingMiddleware = require('./src/middleware/logger/loggingMiddleware.js');
 
 const app = express();
 
@@ -22,11 +31,9 @@ const accessLogStream = fs.createWriteStream(
     { flags: 'a' }
 );
 
-
 // app.use(loggingMiddleware);
 
 app.use(morgan('combined', { stream: accessLogStream}))
-
 
 app.use('/todos', todosRouter);
 app.use('/user', usersRouter);

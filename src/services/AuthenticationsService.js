@@ -24,7 +24,7 @@ class AuthenticationsService {
         });
 
         if(!result) {
-            throw new NotFoundError("Refresh Token tidak ditemukan")
+            throw new NotFoundError("Refresh Token tidak ditemukan");
         }
         return result;
     }
