@@ -1,4 +1,5 @@
 const Permission = require("../models/Permission.js");
+const RolePermission = require("../models/RolePermission.js");
 const InvariantError = require("../exceptions/InvariantError.js");
 const NotFoundError = require("../exceptions/NotFoundError.js");
 const { nanoid } = require("nanoid");
@@ -15,6 +16,10 @@ class PermissionsService {
             throw new InvariantError("Permission gagal dibuat");
         }
         return newPermission.id;
+    }
+
+    async verifyRolePermission(roleId, permission) {
+        
     }
 
     async editPermission(id, permission) {

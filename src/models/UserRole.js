@@ -1,4 +1,4 @@
-// models/Permission.js
+// models/User.js
 const { DataTypes } = require("sequelize");
 const createSequelize = require("../utils/sequlize.js");
 const config = require("../../config/config.js");
@@ -8,33 +8,32 @@ const env = process.env.NODE_ENV || "development";
 const sequelize = createSequelize(config[env]);
 checkSquelize(sequelize, env);
 
-const Permission = sequelize.define(
-  "Permission",
+const UserRole = sequelize.define(
+  "UserRole",
   {
-    id: {
-      type: DataTypes.STRING,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    name: {
+    userId: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+    },
+    roleId: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
   },
   {
-    tableName: "permissions",
+    tableName: "userrole",
     timestamps: false,
   }
 );
 
-Permission.associate = (models) => {
-  Permission.belongsToMany(models.Role, {
-    through: models.RolePermission,
-    foreignKey: "permissionId",
-    otherKey: "roleId",
-    as: "roles",
-  });
+UserRole.associate = (models) => {
+    UserRole.belongsTo(models.User, {
+        foreignKey: "userId",
+    });
+
+    UserRole.belongsTo(models.Role, {
+        foreignKey: "roleId",
+    });
 };
 
-module.exports = Permission;
+module.exports = UserRole;

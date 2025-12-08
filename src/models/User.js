@@ -48,10 +48,11 @@ User.associate = (models) => {
     onDelete: "CASCADE",
   });
 
-  User.belongsToMany(models.Role, {
-    through: "UserRole",
+  User.belongsToMany(models.UserRole, {
+    through: models.UserRole,
     foreignKey: "userId",
     otherKey: "roleId",
+    as: 'roles',
   });
 };
 
