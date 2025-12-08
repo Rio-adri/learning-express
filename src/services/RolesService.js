@@ -23,72 +23,54 @@ class RolesService {
     }
 
     async verifyUserRole(userId, permission) {
-        const userRole = await UserRole.findOne({
+        const userRoles = await UserRole.findAll({
             where: {
                 userId
             }
         });
 
-        if(!userRole) {
-            throw new NotFoundError("User Id tidak ditemukan");
+        if(userRoles.length === 0) {
+            throw new NotFoundError("User belum memiliki role");
         }
 
-        // cek permissionnya apa berdasarkan userRole.
-        const checkResult = await this._permissionsService.verifyRolePermission(userRole.roleId, permission);
+        for (const ur of userRoles) {
+            // cek permissionnya apa berdasarkan userRole.
+            const allowed = await this._permissionsService.verifyRolePermission(ur.roleId, permission);
 
-        if(!checkResult) {
-            throw new InvariantError("Anda tidak berhak mengakses source ini");
+            if(allowed) {
+                return;
+            }
         }
+
+        throw new InvariantError("Anda tidak berhak mengakses source ini");
+        
     }
 
     async getRoleById(id) {
-        const todo = await Role.findOne({
+        const role = await Role.findOne({
             where: {
                 id
             }
         });
 
-        if(!todo) {
+        if(!role) {
             throw new NotFoundError("Data tidak ditemukan");
         }
 
-        return todo
-    }
-
-    async verifyUserRole(userId) {
-        const todo = await Role.findOne({
-            where: {
-                
-            }
-        });
-
-        if(!todo) {
-            throw new NotFoundError("Data tidak ditemukan");
-        }
-
-        return todo
+        return role
     }
 
     async editRole(id, roleName) {
-        const newRole = {
-            id, 
-            name: roleName
-        }
-
-        const updatedRole = await Role.update(newRole, {
-            where: {
-                id
-            },
-            returning: true
-        });
-
-
-        if(!updatedRole) {
+       const [affectedRows, updatedRows] = await Role.update(
+            { name: roleName },
+            { where: { id }, returning: true }
+        );
+        
+        if (affectedRows === 0) {
             throw new NotFoundError("Role tidak ditemukan");
         }
-
-
-        return updatedRole[0].id;
+        
+        return updatedRows[0].id;
     }
 
     async deleteRole(id) {

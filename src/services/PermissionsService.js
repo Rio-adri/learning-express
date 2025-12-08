@@ -19,29 +19,37 @@ class PermissionsService {
     }
 
     async verifyRolePermission(roleId, permission) {
-        
+        const permission = await Permission.findOne({
+            where:{
+                name: permission,
+            }
+        });
+
+        if(!permission) {
+            throw new NotFoundError("Permission tidak ada dalam database");
+        }
+
+        const rolePermission = await RolePermission.findOne({
+            where:{
+                roleId,
+                permission: permission.Id,
+            }
+        });
+
+        return !!rolePermission;
     }
 
     async editPermission(id, permission) {
-        const newPermission = {
-            id, 
-            name: permission
+        const [affectedRows, updatedRows] = await Role.update(
+            { name: permission },
+            { where: { id }, returning: true }
+        );
+        
+        if (affectedRows === 0) {
+            throw new NotFoundError("Role tidak ditemukan");
         }
-
-        const updatedPermission = await Permission.update(newPermission, {
-            where: {
-                id
-            },
-            returning: true
-        });
-
-
-        if(!updatedPermission) {
-            throw new NotFoundError("Permission tidak ditemukan");
-        }
-
-
-        return updatedPermission[0].id;
+        
+        return updatedRows[0].id;
     }
 
     async deletePermission(id) {
